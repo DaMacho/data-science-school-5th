@@ -7,9 +7,11 @@ import random
 # 4 5 6
 # 7 8
 def show_puzzle(puzzle):
+    print
     for row in puzzle:
-        for item in row:
-            print item,
+        for col in row:
+            print '{:<3}'.format(col),
+        print
         print
 
 # 퍼즐을 생성한다.
@@ -17,7 +19,14 @@ def show_puzzle(puzzle):
 # 즉 [[1, 2, 3], [4, 5, 6], [7, 8, '']]
 # 빈공간은 ''로 표현한다
 def initiate_puzzle(size):
-    pass
+    lst = []
+    for n in range(size):
+        if n == size-1:
+            lst.append(range(1+(size*n),(size*(n+1))))
+            lst[size-1].append(' ')
+        else:
+            lst.append(range(1+(size*n),(size*(n+1)+1)))
+    return lst
 
 # 퍼즐을 랜덤하게 섞음
 def shuffle_puzzle(puzzle):
@@ -30,7 +39,7 @@ def shuffle_puzzle(puzzle):
         dx = dxs[rnd]
         dy = dys[rnd]
 
-        i, j = get_index(puzzle, '')
+        i, j = get_index(puzzle, ' ')
         ni = i + dx
         nj = j + dy
 
@@ -40,25 +49,43 @@ def shuffle_puzzle(puzzle):
 
 # 퍼즐이 종료되었는지, 즉 차례대로 정렬되어 완료가 되었는지 검사
 def is_done(puzzle, complete):
-    pass
+
+    if puzzle == complete:
+        return True
+    else:
+        return False
 
 # 퍼즐 보드에서 숫자 n의 인덱스 검색
 # 2차원이기 때문에 i, j형태의 인덱스 값을 반환
 def get_index(puzzle, n):
-    pass
+    k = 0
+    for row in puzzle:
+        if n in row:
+            return k, row.index(n)
+        k += 1
 
 # 퍼즐에서 숫자 n을 이동,
 # 이동할 수 없는 경우에는 이동할 수 없다고 표시
 # 이동이 가능한 경우는 양옆위아래에 ''가 위치해 있을 경우이다
 def move_by_number(puzzle, n):
-    pass
+    i, j = get_index(puzzle, n)
+    move_by_index(puzzle, i, j)
 
 # 숫자를 이동시키기 위해서는 결국 인덱스를 알아야 함
 # 즉 move_by_number 내부에서 호출되는 함순
 def move_by_index(puzzle, i, j):
+
+    for x, y in [(-1,0), (0,1), (1,0), (0,-1)]:
+        if 0 <= i+x < len(puzzle) and 0 <= j+y < len(puzzle):
+            if puzzle[i+x][j+y] == ' ':
+                temp = puzzle[i][j]
+                puzzle[i][j] = puzzle[i+x][j+y]
+                puzzle[i+x][j+y] = temp
+                break
+    else:
+        print "Can't move it"
     # movable condition
     # 좌우위아래 한방향중 하나가 '' 값이라면 이동 가능
-    pass
 
 
 # 퍼즐 생성
@@ -82,7 +109,7 @@ while not is_done(puzzle, complete):
 
     # 화면 clear
     import os
-    cls = lambda: os.system('clear') # windows : cls
+    cls = lambda: os.system('cls') # windows cls
     cls()
 
     # 움직인 이후 퍼즐 상태 보기

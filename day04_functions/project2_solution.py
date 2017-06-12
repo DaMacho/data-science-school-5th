@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import random
+import numpy as np
 
 def show_puzzle(puzzle):
     for i in range(len(puzzle)):
@@ -16,6 +17,19 @@ def initiate_puzzle(size):
             row.append(i*size + j+1)
         puzzle.append(row)
 
+    puzzle[-1][-1] = ''
+    return puzzle
+
+# list comprehension
+def initiate_puzzle2(size):
+    sl = range(size)
+    puzzle = [[i * size + j + 1 for i in sl] for j in sl]
+    puzzle[-1][-1] = ''
+    return puzzle
+
+# numpy
+def initiate_puzzle3(size):
+    puzzle = np.arange(1, size**2+1).reshape(size, size).tolist()
     puzzle[-1][-1] = ''
     return puzzle
 
@@ -56,10 +70,7 @@ def move_by_number(puzzle, n):
 def move_by_index(puzzle, i, j):
     # movable condition
     # 좌우위아래 한방향중 하나가 '' 값이라면 이동 가능
-    dxs = [1, 0, -1,  0]
-    dys = [0, 1,  0, -1]
-
-    for dx, dy in zip(dxs, dys):
+    for dx, dy in ((1, 0), (0, 1), (-1, 0), (0, -1)):
         new_i = i + dx
         new_j = j + dy
 
@@ -74,7 +85,7 @@ def move_by_index(puzzle, i, j):
 
 # 퍼즐 생성
 size = int(raw_input(' -> please insert puzzle size : '))
-puzzle = initiate_puzzle(size)
+puzzle = initiate_puzzle3(size)
 complete = [row[:] for row in puzzle]
 
 # 퍼즐 섞기
@@ -85,7 +96,11 @@ show_puzzle(puzzle)
 
 # 퍼즐 풀기
 while not is_done(puzzle, complete):
-    num = int(raw_input(' -> select a number to move : '))
+    try:
+        num = int(raw_input(' -> select a number to move : '))
+    except:
+        print 'give me a valid number!'
+        continue
     # 움직일 수 선택하기
     move_by_number(puzzle, num)
 
