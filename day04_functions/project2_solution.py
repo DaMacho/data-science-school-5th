@@ -104,6 +104,7 @@ while not is_done(puzzle, complete):
     # 움직일 수 선택하기
     move_by_number(puzzle, num)
 
+
     # 화면 clear
     import os
     cls = lambda: os.system('clear') # windows cls

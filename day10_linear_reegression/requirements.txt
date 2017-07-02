@@ -1,0 +1,13 @@
+sklearn
+matplotlib
+seaborn
+plotly
+cufflinks
+GraphViz
+pydot
+bokeh
+gensim
+pyLDAvis
+konlpy
+wordcloud
+tqdm
